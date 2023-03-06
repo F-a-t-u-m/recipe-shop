@@ -13,7 +13,7 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
-						"outputPath": "dist/recipe-shop",
+						"outputPath": "dist/recipe-shop/browser",
 						"index": "src/index.html",
 						"main": "src/main.ts",
 						"polyfills": [
@@ -92,7 +92,60 @@
 						],
 						"scripts": []
 					}
-				}
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/recipe-shop/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "recipe-shop:build:development",
+              "serverTarget": "recipe-shop:server:development"
+            },
+            "production": {
+              "browserTarget": "recipe-shop:build:production",
+              "serverTarget": "recipe-shop:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "recipe-shop:build:production",
+              "serverTarget": "recipe-shop:server:production"
+            },
+            "development": {
+              "browserTarget": "recipe-shop:build:development",
+              "serverTarget": "recipe-shop:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
 			}
 		}
 	}
